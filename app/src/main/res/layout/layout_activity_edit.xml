@@ -146,6 +146,7 @@
                 android:textSize="16dp" />
 
             <RadioGroup
+                android:id="@+id/rgGender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv4"
@@ -172,7 +173,7 @@
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/etGender"
+                android:layout_below="@id/rgGender"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="@string/label_edit_btn"
