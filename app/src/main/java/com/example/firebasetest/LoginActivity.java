@@ -15,7 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     TextView tvSignUp;
     EditText etEmail, etPassword;
     Button btnLogin;
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_activity_main);
+        setContentView(R.layout.layout_activity_login);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
             }
         });
         etEmail = findViewById(R.id.etEmail);
@@ -45,11 +45,12 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Toast.makeText(MainActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
-                    Intent I = new Intent(MainActivity.this, ProfileActivity.class);
+                    Toast.makeText(LoginActivity.this, "User logged in ", Toast.LENGTH_SHORT).show();
+                    Intent I = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(I);
+                    finish();
                 } else {
-                    Toast.makeText(MainActivity.this, "Login to continue", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login to continue", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -65,20 +66,20 @@ public class MainActivity extends AppCompatActivity {
                     etPassword.setError("Enter Password!");
                     etPassword.requestFocus();
                 } else if (userEmail.isEmpty() && userPaswd.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Fields Empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Fields Empty!", Toast.LENGTH_SHORT).show();
                 } else if (!(userEmail.isEmpty() && userPaswd.isEmpty())) {
-                    mAuth.signInWithEmailAndPassword(userEmail, userPaswd).addOnCompleteListener(MainActivity.this, new OnCompleteListener() {
+                    mAuth.signInWithEmailAndPassword(userEmail, userPaswd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (!task.isSuccessful()) {
-                                Toast.makeText(MainActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
                             } else {
-                                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                             }
                         }
                     });
                 } else {
-                    Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
         });
