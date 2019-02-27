@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">FirebaseTest</string>
+    <string name="prompt_name">Name</string>
+    <string name="prompt_first_name">First Name</string>
+    <string name="prompt_last_name">Last Name</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_Phone">Phone Number</string>
+    <string name="prompt_Address">Address</string>
+    <string name="prompt_Gender">Gender</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_confirm_password">Confirm Password</string>
+    <string name="label_login_btn">LOGIN</string>
+    <string name="label_edit_btn">EDIT</string>
+    <string name="label_save_btn">SAVE</string>
+    <string name="label_register_btn">REGISTER</string>
+    <string name="sign_up_message">New User ? Sign Up</string>
+</resources>
+
