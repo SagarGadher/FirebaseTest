@@ -1,5 +1,6 @@
 package com.example.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText etEmail, etPassword, etCPassword;
 
     FirebaseAuth mAuth;
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +27,7 @@ public class SignupActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        //etName = findViewById(R.id.etName);
+        progressDialog = new ProgressDialog(this);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         etCPassword = findViewById(R.id.etConfirmPassword);
@@ -52,6 +53,9 @@ public class SignupActivity extends AppCompatActivity {
                 } else if (emailID.isEmpty() && paswd.isEmpty() && cpaswd.isEmpty()) {
                     Toast.makeText(SignupActivity.this, "Fields Empty!", Toast.LENGTH_SHORT).show();
                 } else if (!(emailID.isEmpty() && paswd.isEmpty() && cpaswd.isEmpty())) {
+                    progressDialog.show();
+                    progressDialog.setMessage("SignUp is in progress");
+                    progressDialog.setCanceledOnTouchOutside(false);
                     mAuth.createUserWithEmailAndPassword(emailID, paswd).addOnCompleteListener(SignupActivity.this, new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
@@ -61,7 +65,8 @@ public class SignupActivity extends AppCompatActivity {
                                         "SignUp unsuccessful: " + task.getException().getMessage(),
                                         Toast.LENGTH_SHORT).show();
                             } else {
-                                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                                progressDialog.dismiss();
+                                startActivity(new Intent(SignupActivity.this, DetailsActivity.class));
                                 finish();
                             }
                         }

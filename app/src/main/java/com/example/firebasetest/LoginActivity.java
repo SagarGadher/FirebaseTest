@@ -1,5 +1,6 @@
 package com.example.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,21 +15,24 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
     TextView tvSignUp;
     EditText etEmail, etPassword;
     Button btnLogin;
     FirebaseAuth.AuthStateListener authStateListener;
-    FirebaseAuth mAuth;
-
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference rootReference = firebaseDatabase.getReference();
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-
+        progressDialog = new ProgressDialog(this);
         tvSignUp = findViewById(R.id.tvSignUp);
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,12 +72,16 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (userEmail.isEmpty() && userPaswd.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Fields Empty!", Toast.LENGTH_SHORT).show();
                 } else if (!(userEmail.isEmpty() && userPaswd.isEmpty())) {
+                    progressDialog.show();
+                    progressDialog.setMessage("Login is in progress");
+                    progressDialog.setCanceledOnTouchOutside(false);
                     mAuth.signInWithEmailAndPassword(userEmail, userPaswd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (!task.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
                             } else {
+                                progressDialog.dismiss();
                                 startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                             }
                         }

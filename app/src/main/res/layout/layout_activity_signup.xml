@@ -48,7 +48,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="@string/prompt_email"
-            android:layout_below="@+id/etName"
             android:textColor="@color/colorText"
             android:textSize="18dp" />
 

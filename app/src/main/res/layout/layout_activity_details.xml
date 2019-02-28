@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditActivity">
-
+    tools:context=".DetailsActivity">
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,7 +32,7 @@
                 android:layout_below="@+id/iVUser"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="2dp"
-                android:text="Choose Photo"
+                android:text="Change Photo"
                 android:textColor="@color/colorDarkText"
                 android:textSize="16dp" />
 
@@ -52,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv6"
-                android:hint="First Name"
+                android:hint="Enter First Name"
                 android:textColor="@color/colorDarkText"
                 android:textSize="20sp" />
 
@@ -71,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv7"
-                android:hint="Last Name"
+                android:hint="Enter Last Name"
                 android:textColor="@color/colorDarkText"
                 android:textSize="20sp" />
 
@@ -91,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv1"
                 android:layout_marginTop="8dp"
-                android:hint="Email Address"
+                android:hint="Enter Email Address"
                 android:textColor="@color/colorDarkText"
                 android:textSize="20sp" />
 
@@ -111,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv2"
                 android:layout_marginTop="8dp"
-                android:hint="Phone number"
+                android:hint="Enter Phone Number"
                 android:textColor="@color/colorDarkText"
                 android:textSize="20sp" />
 
@@ -131,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv3"
                 android:layout_marginTop="8dp"
-                android:hint="Address"
+                android:hint="Enter Address"
                 android:textColor="@color/colorDarkText"
                 android:textSize="20sp" />
 
@@ -158,7 +157,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="rbClicked"
-                    android:checked="true"
                     android:text="Male" />
 
                 <RadioButton

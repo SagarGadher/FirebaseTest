@@ -1,6 +1,7 @@
 package com.example.firebasetest;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,29 +19,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity implements ValueEventListener {
     TextView tvFName, tvLName, tvEmail, tvPhone, tvAddress, tvGender;
     ImageView ivUser;
     Button btnEdit;
 
-    FirebaseAuth mAuth;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();;
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference rootReference = firebaseDatabase.getReference();
-    DatabaseReference fNameReference = rootReference.child("fName");
-    DatabaseReference lNameReference = rootReference.child("lName");
-    DatabaseReference emailReference = rootReference.child("email");
-    DatabaseReference addressReference = rootReference.child("address");
-    DatabaseReference phoneReference = rootReference.child("phone");
-    DatabaseReference genderReference = rootReference.child("gender");
+    DatabaseReference fNameReference = rootReference.child(mAuth.getUid()).child("fName");
+    DatabaseReference lNameReference = rootReference.child(mAuth.getUid()).child("lName");
+    DatabaseReference emailReference = rootReference.child(mAuth.getUid()).child("email");
+    DatabaseReference addressReference = rootReference.child(mAuth.getUid()).child("address");
+    DatabaseReference phoneReference = rootReference.child(mAuth.getUid()).child("phone");
+    DatabaseReference genderReference = rootReference.child(mAuth.getUid()).child("gender");
+    DatabaseReference imageReference = rootReference.child(mAuth.getUid()).child("image");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_activity_profile);
-
-        mAuth = FirebaseAuth.getInstance();
 
         ivUser = findViewById(R.id.iVUser);
         tvFName = findViewById(R.id.tvFName);
@@ -90,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity implements ValueEventList
         addressReference.addValueEventListener(this);
         phoneReference.addValueEventListener(this);
         genderReference.addValueEventListener(this);
+        imageReference.addValueEventListener(this);
     }
 
     @Override
@@ -120,6 +122,9 @@ public class ProfileActivity extends AppCompatActivity implements ValueEventList
                 case "gender":
                     String gender = dataSnapshot.getValue(String.class);
                     tvGender.setText(gender);
+                    break;
+                case "image":
+                    Picasso.get().load(dataSnapshot.getValue(String.class)).fit().centerCrop().into(ivUser);
                     break;
             }
         }

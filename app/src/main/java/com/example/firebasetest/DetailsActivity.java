@@ -8,9 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -25,11 +22,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -37,7 +31,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-public class EditActivity extends AppCompatActivity implements ValueEventListener {
+public class DetailsActivity extends AppCompatActivity {
     EditText etFName, etLName, etEmail, etPhone, etAddress, etGender;
     Button btnSave;
     RadioButton rbMale, rbFemale;
@@ -49,7 +43,7 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
     ProgressDialog progressDialog;
     boolean imageChange = false;
 
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference rootReference = firebaseDatabase.getReference();
@@ -64,11 +58,13 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
     FirebaseStorage rootStorage = FirebaseStorage.getInstance();
     StorageReference mStorageReference = rootStorage.getReference("image");
 
+    Intent intent;
     StorageTask mStorageTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_activity_edit);
+        setContentView(R.layout.layout_activity_details);
 
         ivUser = findViewById(R.id.iVUser);
         tvChangePhoto = findViewById(R.id.tvChangePhoto);
@@ -83,14 +79,13 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
         rbMale.setChecked(true);
         progressDialog = new ProgressDialog(this);
         Gender = "Male";
-
         tvChangePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changePhoto();
             }
         });
-
+        intent = new Intent(DetailsActivity.this, ProfileActivity.class);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,15 +117,14 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
                     phoneReference.setValue(Phone);
                     genderReference.setValue(Gender);
 
-                    if (mStorageTask != null && mStorageTask.isInProgress()){
-                        Toast.makeText(EditActivity.this, "Upload in Progress", Toast.LENGTH_SHORT).show();
+                    if (mStorageTask != null && mStorageTask.isInProgress()) {
+                        Toast.makeText(DetailsActivity.this, "Upload in Progress", Toast.LENGTH_SHORT).show();
                     }
-                    else if(imageChange) {
+                    if (!imageChange) {
+                        Toast.makeText(DetailsActivity.this, "Pleas select any photo as profile", Toast.LENGTH_SHORT).show();
+                    } else if (imageChange) {
                         uploadImage();
                         imageChange = false;
-                    }
-                    else {
-                        finish();
                     }
                 }
             }
@@ -183,13 +177,14 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
                     fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            if(uri != null){
+                            if (uri != null) {
                                 imageReference.setValue(uri.toString());
                             }
                         }
                     });
-                    Toast.makeText(EditActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailsActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
+                    startActivity(intent);
                     finish();
                 }
             }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -199,7 +194,7 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(EditActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -210,86 +205,5 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
                 }
             });
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.appbar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_logout:
-                signOut();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void signOut() {
-        mAuth.signOut();
-        startActivity(new Intent(EditActivity.this, LoginActivity.class));
-        finish();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        fNameReference.addValueEventListener(this);
-        lNameReference.addValueEventListener(this);
-        emailReference.addValueEventListener(this);
-        addressReference.addValueEventListener(this);
-        phoneReference.addValueEventListener(this);
-        genderReference.addValueEventListener(this);
-        imageReference.addValueEventListener(this);
-    }
-
-    @Override
-    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        if (dataSnapshot.getValue(String.class) != null) {
-            String key = dataSnapshot.getKey();
-            switch (key) {
-                case "fName":
-                    String fName = dataSnapshot.getValue(String.class);
-                    etFName.setText(fName);
-                    break;
-                case "lName":
-                    String lName = dataSnapshot.getValue(String.class);
-                    etLName.setText(lName);
-                    break;
-                case "email":
-                    String email = dataSnapshot.getValue(String.class);
-                    etEmail.setText(email);
-                    break;
-                case "phone":
-                    String phone = dataSnapshot.getValue(String.class);
-                    etPhone.setText(phone);
-                    break;
-                case "address":
-                    String address = dataSnapshot.getValue(String.class);
-                    etAddress.setText(address);
-                    break;
-                case "gender":
-                    String gender = dataSnapshot.getValue(String.class);
-                    if (gender.equals("Male")) {
-                        rbMale.setChecked(true);
-                    }
-                    if (gender.equals("Female")) {
-                        rbFemale.setChecked(true);
-                    }
-                    break;
-                case "image":
-                    Picasso.get().load(dataSnapshot.getValue(String.class)).fit().centerCrop().into(ivUser);
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
-
     }
 }
