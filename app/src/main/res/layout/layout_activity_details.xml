@@ -90,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv1"
                 android:layout_marginTop="8dp"
+                android:inputType="textEmailAddress"
                 android:hint="Enter Email Address"
                 android:textColor="@color/colorDarkText"
                 android:textSize="20sp" />
@@ -111,6 +112,7 @@
                 android:layout_below="@id/tv2"
                 android:layout_marginTop="8dp"
                 android:hint="Enter Phone Number"
+                android:inputType="number"
                 android:textColor="@color/colorDarkText"
                 android:textSize="20sp" />
 

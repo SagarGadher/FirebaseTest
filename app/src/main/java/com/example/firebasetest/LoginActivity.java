@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (!task.isSuccessful()) {
+                                progressDialog.dismiss();
                                 Toast.makeText(LoginActivity.this, "Not sucessfull", Toast.LENGTH_SHORT).show();
                             } else {
                                 progressDialog.dismiss();
@@ -87,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    progressDialog.dismiss();
                     Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -61,6 +61,7 @@ public class SignupActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task task) {
 
                             if (!task.isSuccessful()) {
+                                progressDialog.dismiss();
                                 Toast.makeText(SignupActivity.this.getApplicationContext(),
                                         "SignUp unsuccessful: " + task.getException().getMessage(),
                                         Toast.LENGTH_SHORT).show();
@@ -72,6 +73,7 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     });
                 } else {
+                    progressDialog.dismiss();
                     Toast.makeText(SignupActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
             }

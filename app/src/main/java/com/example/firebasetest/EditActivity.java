@@ -199,6 +199,7 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
                     Toast.makeText(EditActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
