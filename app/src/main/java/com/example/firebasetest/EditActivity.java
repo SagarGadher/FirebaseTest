@@ -85,6 +85,7 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
                     addressReference.setValue(Address);
                     phoneReference.setValue(Phone);
                     genderReference.setValue(Gender);
+                    finish();
                 }
             }
         });
