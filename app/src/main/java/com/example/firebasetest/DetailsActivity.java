@@ -31,6 +31,8 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class DetailsActivity extends AppCompatActivity {
     EditText etFName, etLName, etEmail, etPhone, etAddress, etGender;
     Button btnSave;
@@ -156,7 +158,7 @@ public class DetailsActivity extends AppCompatActivity {
         if (requestCode == CHANGE_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             mImageUri = data.getData();
 
-            Picasso.get().load(mImageUri).into(ivUser);
+            Picasso.get().load(mImageUri).transform(new CropCircleTransformation()).fit().centerCrop().into(ivUser);
             imageChange = true;
         }
     }

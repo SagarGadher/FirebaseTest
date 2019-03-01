@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,6 +37,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class EditActivity extends AppCompatActivity implements ValueEventListener {
     EditText etFName, etLName, etEmail, etPhone, etAddress, etGender;
@@ -72,6 +75,8 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
 
         ivUser = findViewById(R.id.iVUser);
         tvChangePhoto = findViewById(R.id.tvChangePhoto);
+        imageReference.addValueEventListener(this);
+
         etFName = findViewById(R.id.etFName);
         etLName = findViewById(R.id.etLName);
         etEmail = findViewById(R.id.etEmail);
@@ -161,8 +166,7 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
 
         if (requestCode == CHANGE_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             mImageUri = data.getData();
-
-            Picasso.get().load(mImageUri).into(ivUser);
+            Picasso.get().load(mImageUri).transform(new CropCircleTransformation()).fit().centerCrop().into(ivUser);
             imageChange = true;
         }
     }
@@ -245,7 +249,6 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
         addressReference.addValueEventListener(this);
         phoneReference.addValueEventListener(this);
         genderReference.addValueEventListener(this);
-        imageReference.addValueEventListener(this);
     }
 
     @Override
@@ -283,7 +286,7 @@ public class EditActivity extends AppCompatActivity implements ValueEventListene
                     }
                     break;
                 case "image":
-                    Picasso.get().load(dataSnapshot.getValue(String.class)).fit().centerCrop().into(ivUser);
+                    Picasso.get().load(dataSnapshot.getValue(String.class)).transform(new CropCircleTransformation()).fit().centerCrop().into(ivUser);
                     break;
             }
         }

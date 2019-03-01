@@ -21,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
+
 public class ProfileActivity extends AppCompatActivity implements ValueEventListener {
     TextView tvFName, tvLName, tvEmail, tvPhone, tvAddress, tvGender;
     ImageView ivUser;
@@ -124,7 +126,7 @@ public class ProfileActivity extends AppCompatActivity implements ValueEventList
                     tvGender.setText(gender);
                     break;
                 case "image":
-                    Picasso.get().load(dataSnapshot.getValue(String.class)).fit().centerCrop().into(ivUser);
+                    Picasso.get().load(dataSnapshot.getValue(String.class)).transform(new CropCircleTransformation()).fit().centerCrop().into(ivUser);
                     break;
             }
         }
